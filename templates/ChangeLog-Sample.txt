@@ -1,0 +1,52 @@
+================================================================================
+CHANGELOG SUMMARY - LACONIC PROJECTS
+================================================================================
+Project: Laconic Infrastructure & Applications
+Last Updated: 2025-12-17
+================================================================================
+
+| Date       | Issue ID          | Status         | Summary                                    |
+|------------|-------------------|----------------|--------------------------------------------|
+| 2025-12-17 | NCM-4833          | 🔄 IN PROGRESS | Extract data-pipeline to ncm-data-factory  |
+|            |                   |                |                                            |
+
+Note: Latest entries appear first (newest on top)
+
+================================================================================
+DETAILED CHANGELOG ENTRIES
+================================================================================
+
+--------------------------------------------------------------------------------
+[2025-12-17] NCM-4833: Extract data-pipeline & notebooks into new repo
+--------------------------------------------------------------------------------
+Status: 🔄 IN PROGRESS (MR Pending Review)
+
+Summary:
+- Separated data-pipelines and notebooks from sadar_ncm1 into ncm-data-factory
+- Reduces deployment risks due to different cadences between API and pipelines
+- Simplifies CI/CD pipeline by removing Airflow build steps
+
+Components Affected:
+- sadar_ncm1 (backend removed)
+- ncm-data-factory (new repo)
+- GitLab CI/CD pipeline
+
+Changes Made:
+- Deleted backend/data-pipelines/ (~200+ files)
+- Deleted backend/notebooks/ (39 Jupyter notebooks)
+- Deleted backend/spark/ (~10 Spark job files)
+- Removed AIRFLOW_PATH, AIRFLOW_COVERAGE_FILE variables from CI
+- Removed airflow-test, aws-mwaa-local-runner jobs
+- Removed deploy-dag-stg, deploy-dag-prod jobs
+- Removed update-mwaa-stg, update-mwaa-prod jobs
+- Updated TECH_STACK to remove Airflow reference
+
+Files Modified:
+- sadar_ncm1/.gitlab-ci.yml
+
+Notes:
+- ncm-data-factory deployment tested and approved by Dan
+- MR branch: cleanup/ncm-4833-remove-data-factory
+- Awaiting Dan's review before merge to main
+
+--------------------------------------------------------------------------------

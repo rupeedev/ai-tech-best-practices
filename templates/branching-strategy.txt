@@ -1,0 +1,42 @@
+Deployment Strategy
+
+  | Branch | Environment | Deployment Type | S3 Bucket                  | URL
+                           |
+  |--------|-------------|-----------------|----------------------------|----------
+  -------------------------|
+  | main   | Staging     | Automatic       | ncm.stg.laconicglobal.com  |
+  https://ncm.stg.laconicglobal.com |
+  | main   | Production  | Manual          | ncm.prod.laconicglobal.com |
+  https://ncm.laconicglobal.com     |
+
+  Deployment Flow
+
+  Push to main branch
+      ↓
+  Automatic deployment to STAGING
+      ↓
+      ├── Security scans run (npm-audit, trivy, gitleaks, retirejs)
+      ├── Build and deploy to staging S3
+      ├── Post-deployment security checks (ZAP scan, security headers)
+      ↓
+  Manual approval required
+      ↓
+  Manual deployment to PRODUCTION
+      ↓
+      └── Build and deploy to production S3
+      └── Post-deployment ZAP scan
+
+  Key Configuration Details
+
+  Staging (lines 369-424):
+  - Trigger: if: $CI_COMMIT_REF_NAME == "main" with when: always
+  - API URLs: api-ncm.stg.laconicglobal.com, q-ncm.stg.laconicglobal.com
+  - CloudFront Distribution: ${STG_CLOUDFRONT_DIST_ID_STAGE}
+
+  Production (lines 517-569):
+  - Trigger: if: $CI_COMMIT_REF_NAME == "main" with when: manual
+  - API URLs: api-ncm-new.prod.laconicglobal.com, q-new.prod.laconicglobal.com
+  - CloudFront Distribution: E1BOJOWKHP4PTT
+
+  Note: Only the main branch has deployment configured. No other branches (feature
+  branches, develop, etc.) trigger deployments
