@@ -1,0 +1,100 @@
+claude mcp add --transport http linear-server https://mcp.linear.app/mcp
+
+
+linear-server: https://mcp.linear.app/mcp (HTTP) - ⚠ Needs authentication                                                             
+                                                                                                                                        
+  Next Step: Restart Claude Code and authenticate with Linear when prompted.                                                            
+                                                                                                                                        
+  Linear MCP allows you to:                                                                                                             
+  - Create/update issues                                                                                                                
+  - Search issues                                                                                                                       
+  - Manage projects                                                                                                                     
+  - View team workflows
+
+## Commands Used to Create Project Tracking
+
+### List Teams
+mcp__linear-server__list_teams
+
+### Create Project
+mcp__linear-server__create_project
+  - name: "Flask App - DigitalOcean Deployment"
+  - description: "A Flask web application configured for deployment on DigitalOcean App Platform..."
+  - team: "Myorg"
+  - summary: "Flask API with DigitalOcean App Platform deployment, Docker containerization, and dashboard integration"
+  - state: "started"
+  - icon: ":rocket:"
+
+### Create Issues
+mcp__linear-server__create_issue
+  - title: "Setup Flask application with core API endpoints"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+  - state: "Done"
+
+mcp__linear-server__create_issue
+  - title: "Configure Gunicorn for production deployment"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+  - state: "Done"
+
+mcp__linear-server__create_issue
+  - title: "Create Dockerfile for containerization"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+  - state: "Done"
+
+mcp__linear-server__create_issue
+  - title: "Setup docker-compose for local development"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+  - state: "Done"
+
+mcp__linear-server__create_issue
+  - title: "Write unit tests with pytest"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+  - state: "Done"
+
+mcp__linear-server__create_issue
+  - title: "Deploy to DigitalOcean App Platform"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+  - state: "In Progress"
+
+mcp__linear-server__create_issue
+  - title: "Setup CI/CD pipeline for automated deployments"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+
+mcp__linear-server__create_issue
+  - title: "Configure Metabase dashboard integration"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+
+mcp__linear-server__create_issue
+  - title: "Setup NocoBase for low-code dashboard"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+
+mcp__linear-server__create_issue
+  - title: "Setup AI Dashboard integration"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+
+mcp__linear-server__create_issue
+  - title: "Add environment variable documentation"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+  - state: "Done"
+
+mcp__linear-server__create_issue
+  - title: "Add API documentation (OpenAPI/Swagger)"
+  - team: "Myorg"
+  - project: "Flask App - DigitalOcean Deployment"
+
+### List Issues for Project
+mcp__linear-server__list_issues
+  - project: "Flask App - DigitalOcean Deployment"
+  - team: "Myorg"
+  - limit: 20
