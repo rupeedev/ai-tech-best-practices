@@ -259,3 +259,106 @@
   3. Adding new features to deployment manager
     - Different automation approaches
     - Various error handling strategies
+
+
+git worktrees are NOT a replacement for feature/fix/hotfix branching strategy.
+
+  They serve different purposes and are actually complementary:
+
+  Traditional Branching Strategy (feature/fix/hotfix)
+
+  Purpose: Organizational workflow for team collaboration
+  - feature/* - New functionality
+  - fix/* - Bug fixes
+  - hotfix/* - Critical production fixes
+  - Helps teams understand what type of work is happening
+  - One implementation per branch
+  - Linear development approach
+
+  Git Worktrees Approach
+
+  Purpose: Parallel exploration of multiple solutions
+  - Creates multiple working directories from the same repository
+  - Runs multiple Claude Code agents in parallel
+  - Each agent tries a different approach to the SAME task
+  - Select the best implementation afterward
+  - Useful when requirements are ambiguous or you want multiple perspectives
+
+  ---
+  How They Work Together
+
+  Git worktrees work within your existing branching strategy:
+
+  Example: Traditional Approach
+
+  git checkout -b feature/add-authentication
+  # Work on authentication
+  # Commit and push
+
+  Example: Worktrees + Traditional Branching
+
+  # Create 3 parallel worktrees to explore authentication approaches
+  git worktree add -b feature/auth-jwt-agent-1 ../trees/auth-agent-1
+  git worktree add -b feature/auth-oauth-agent-2 ../trees/auth-agent-2
+  git worktree add -b feature/auth-session-agent-3 ../trees/auth-agent-3
+
+  # Each agent explores different implementation
+  # Review all three
+  # Merge the best one to main
+  git merge feature/auth-oauth-agent-2 --no-ff -m "Merge OAuth implementation"
+
+  # Cleanup other approaches
+  git branch -d feature/auth-jwt-agent-1 feature/auth-session-agent-3
+
+  Notice: You're still using feature branches, but with worktrees to explore multiple implementations in parallel.
+
+  ---
+  When to Use Each
+
+  Use Traditional Branching When:
+
+  ✅ You know exactly what to implement
+  ✅ Single developer working on a feature
+  ✅ Standard, well-understood tasks
+  ✅ Budget-conscious (no 3x token costs)
+
+  Add Git Worktrees When:
+
+  ✅ Ambiguous requirements - Multiple valid approaches exist
+  ✅ High-stakes tasks - Want insurance if one approach fails
+  ✅ Architecture decisions - Comparing REST vs gRPC vs GraphQL
+  ✅ Complex refactoring - Different strategies for same goal
+  ✅ AI agent variability - Leveraging non-deterministic outputs
+
+  ---
+  Real-World MLOps Example
+
+  Scenario: Add caching to your deployment pipeline
+
+  Traditional Approach:
+  git checkout -b feature/add-caching
+  # Implement Redis caching
+  # Test, commit, push
+
+  Worktrees Approach (for ambiguous/complex scenarios):
+  # Explore 3 caching strategies in parallel
+  ./scripts/create_parallel_trees.sh feature/add-caching 3
+
+  # Agent 1: Redis caching
+  # Agent 2: In-memory caching  
+  # Agent 3: Cloud Memorystore
+
+  # Test all 3, pick the best
+  git merge feature/add-caching-agent-2 --no-ff
+
+  ---
+  Bottom Line
+
+  Git worktrees are a tactical tool for parallel exploration, not a strategic workflow like feature/fix/hotfix branching.
+
+  Think of it this way:
+  - Branching strategy = Your project's organizational framework
+  - Git worktrees = A power tool you occasionally pull out for specific complex tasks
+
+  You'd still use feature/, fix/, hotfix/ branches, but when a feature is particularly ambiguous or critical, you might create multiple
+  worktrees to explore different implementations of that feature in parallel.
