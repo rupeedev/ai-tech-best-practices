@@ -1,0 +1,261 @@
+
+⏺ High-Level Implementation Plan: Parallel Claude Code with Git Worktrees
+
+  Core Concept
+
+  Run multiple Claude Code agents in parallel on the same task specification using Git worktrees to generate different implementation
+  approaches, then select and merge the best solution.
+
+  Benefits
+
+  - Multiple perspectives: Leverage LLM non-determinism to get varied solutions
+  - Higher success rate: If one agent fails, others may succeed
+  - Best-of-N selection: Choose the optimal implementation from multiple options
+  - Physical isolation: No merge conflicts during parallel execution
+
+  ---
+  Implementation Plan
+
+  Phase 1: Environment Setup
+
+  1.1 Create Worktree Directory Structure
+  # From your project root
+  mkdir -p ../trees
+
+  1.2 Create Worktree Automation Script
+  - File: scripts/create_worktree.sh
+  - Purpose: Automate worktree creation with environment setup
+
+  #!/bin/bash
+  BRANCH=$1
+  mkdir -p ../trees
+  git worktree add -b $BRANCH ../trees/$BRANCH
+  cd ../trees/$BRANCH
+
+  # Copy environment files
+  cp ../../MLOps/.env . 2>/dev/null || true
+
+  echo "Worktree created for $BRANCH at ../trees/$BRANCH"
+
+  1.3 Create Multi-Worktree Launcher
+  - File: scripts/create_parallel_trees.sh
+  - Purpose: Create N worktrees at once
+
+  #!/bin/bash
+  TASK_NAME=$1
+  NUM_AGENTS=${2:-3}
+
+  for i in $(seq 1 $NUM_AGENTS); do
+    BRANCH="${TASK_NAME}-agent-${i}"
+    ./scripts/create_worktree.sh $BRANCH
+  done
+
+  echo "Created $NUM_AGENTS worktrees for task: $TASK_NAME"
+
+  ---
+  Phase 2: Task Specification
+
+  2.1 Define Clear Task Specifications
+  - Document the task with precise requirements
+  - Include acceptance criteria
+  - Specify constraints (dependencies, architecture, etc.)
+
+  Example Format:
+  ## Task: Implement Feature X
+
+  **Objective**: [Clear description]
+
+  **Requirements**:
+  1. Requirement 1
+  2. Requirement 2
+
+  **Constraints**:
+  - Must use existing patterns
+  - No breaking changes
+
+  **Acceptance Criteria**:
+  - [ ] Criterion 1
+  - [ ] Criterion 2
+
+  ---
+  Phase 3: Parallel Execution
+
+  3.1 Create Custom Slash Command
+  - File: .claude/commands/parallel-execute.md
+  - Purpose: Execute task across all worktrees
+
+  Execute the task specification across N parallel agents in separate worktrees.
+
+  Usage: /parallel-execute [task-name] [specification]
+
+  For each worktree in ../trees/[task-name]-agent-*:
+  1. Navigate to the worktree
+  2. Execute the task specification
+  3. Run tests
+  4. Generate summary report
+
+  3.2 Execution Strategy
+  # Manual approach
+  for i in {1..3}; do
+    cd ../trees/ui-rewrite-agent-$i
+    # Open Claude Code instance
+    # Paste same task specification
+    # Let agent work independently
+  done
+
+  3.3 Port Management (if running servers)
+  - Agent 1: Port 3001
+  - Agent 2: Port 3002
+  - Agent 3: Port 3003
+
+  Update configs in each worktree to avoid conflicts.
+
+  ---
+  Phase 4: Testing & Review
+
+  4.1 Test All Implementations
+  # Create testing script
+  # File: scripts/test_all_trees.sh
+
+  #!/bin/bash
+  TASK_NAME=$1
+
+  for tree in ../trees/${TASK_NAME}-agent-*; do
+    echo "Testing $tree..."
+    cd $tree
+    # Run tests
+    python -m pytest || echo "Tests failed in $tree"
+    cd -
+  done
+
+  4.2 Review Each Implementation
+  - Compare code quality
+  - Check test coverage
+  - Evaluate performance
+  - Assess maintainability
+  - Review documentation
+
+  4.3 Generate Comparison Report
+  Create a comparison matrix:
+
+  | Agent | Tests Pass | Code Quality | Performance | Notes          |
+  |-------|------------|--------------|-------------|----------------|
+  | 1     | ✅          | Good         | Fast        | Clean approach |
+  | 2     | ✅          | Excellent    | Medium      | Best overall   |
+  | 3     | ❌          | N/A          | N/A         | Failed tests   |
+
+  ---
+  Phase 5: Selection & Merge
+
+  5.1 Select Winner
+  - Choose best implementation based on criteria
+  - Document selection rationale
+
+  5.2 Merge to Main
+  # From main project
+  git checkout main
+
+  # Merge winning worktree
+  git merge ui-rewrite-agent-2 --no-ff -m "Merge best implementation from agent 2
+
+  Selected based on:
+  - All tests passing
+  - Cleanest code structure
+  - Best performance
+  - Complete documentation"
+
+  # Push to remote
+  git push origin main
+
+  5.3 Cleanup Worktrees
+  # Script: scripts/cleanup_worktrees.sh
+
+  #!/bin/bash
+  TASK_NAME=$1
+
+  for tree in ../trees/${TASK_NAME}-agent-*; do
+    BRANCH=$(basename $tree)
+    git worktree remove $tree
+    git branch -d $BRANCH
+  done
+
+  echo "Cleaned up all worktrees for $TASK_NAME"
+
+  ---
+  Phase 6: Workflow Optimization
+
+  6.1 Create Workflow Template
+  # Complete workflow script
+  # File: scripts/parallel_workflow.sh
+
+  #!/bin/bash
+  TASK_NAME=$1
+  NUM_AGENTS=${2:-3}
+
+  echo "=== Phase 1: Create Worktrees ==="
+  ./scripts/create_parallel_trees.sh $TASK_NAME $NUM_AGENTS
+
+  echo "=== Phase 2: Execute (Manual) ==="
+  echo "Open Claude Code in each worktree and run the task"
+  echo "Worktrees created in ../trees/${TASK_NAME}-agent-*"
+  read -p "Press enter when all agents complete..."
+
+  echo "=== Phase 3: Test All ==="
+  ./scripts/test_all_trees.sh $TASK_NAME
+
+  echo "=== Phase 4: Review ==="
+  echo "Review each implementation and select winner"
+  read -p "Enter winning agent number (1-$NUM_AGENTS): " WINNER
+
+  echo "=== Phase 5: Merge ==="
+  git checkout main
+  git merge ${TASK_NAME}-agent-${WINNER} --no-ff
+
+  echo "=== Phase 6: Cleanup ==="
+  ./scripts/cleanup_worktrees.sh $TASK_NAME
+
+  echo "Workflow complete!"
+
+  ---
+  When to Use This Approach
+
+  ✅ Use Parallel Agents For:
+  - Ambiguous requirements with multiple valid approaches
+  - Complex refactoring tasks
+  - UI/UX redesigns
+  - Architecture decisions
+  - High-risk changes where one approach might fail
+  - Exploring different implementation patterns
+
+  ❌ Don't Use For:
+  - Simple, well-defined tasks
+  - When you have clear implementation in mind
+  - Budget-constrained projects (high token costs)
+  - Tasks requiring human iteration
+
+  ---
+  Cost Considerations
+
+  Token Multiplication: Running 3 agents = 3x the token cost
+  Mitigation:
+  - Use for critical tasks only
+  - Start with 2 agents instead of 3
+  - Use cheaper models for initial exploration
+  - Reserve parallel execution for final implementations
+
+  ---
+  Your MLOps Project Application
+
+  For your current project, this would be useful for:
+
+  1. Implementing new ML model serving patterns
+    - Agent 1: REST API approach
+    - Agent 2: gRPC approach
+    - Agent 3: GraphQL approach
+  2. Refactoring deployment pipeline
+    - Different Cloud Build configurations
+    - Alternative infrastructure patterns
+    - Various testing strategies
+  3. Adding new features to deployment manager
+    - Different automation approaches
+    - Various error handling strategies
