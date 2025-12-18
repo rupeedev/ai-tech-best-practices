@@ -1,0 +1,106 @@
+Metabase Overview                                                                                                                     
+                                                                                                                                        
+  Metabase is an open-source BI tool for building dashboards without SQL expertise.                                                     
+                                                                                                                                        
+  Key Features:                                                                                                                         
+  - No-code query builder                                                                                                               
+  - SQL editor for advanced queries                                                                                                     
+  - Interactive dashboards with filters                                                                                                 
+  - Embed charts/dashboards into your app                                                                                               
+  - Alerts and scheduled reports                                                                                                        
+                                                                                                                                        
+  Implementation Options for Your Flask App                                                                                             
+                                                                                                                                        
+  Option 1: Docker (Quickest)                                                                                                           
+                                                                                                                                        
+  # Run Metabase                                                                                                                        
+  docker run -d -p 3000:3000 --name metabase metabase/metabase                                                                          
+                                                                                                                                        
+  # Access at http://localhost:3000                                                                                                     
+                                                                                                                                        
+  Option 2: Docker Compose (Recommended for Production)                                                                                 
+                                                                                                                                        
+⏺ Write(docker-compose.yml)                                                                                                             
+  ⎿  Wrote 41 lines to docker-compose.yml                                                                                               
+     version: '3.8'                                                                                                                     
+     services:                                                                                                                          
+       flask-app:                                                                                                                       
+         build: .                                                                                                                       
+         ports:                                                                                                                         
+           - "8080:8080"                                                                                                                
+         environment:                                                                                                                   
+           - APP_ENV=production                                                                                                         
+           - LOG_LEVEL=INFO                                                                                                             
+     … +31 lines (ctrl+o to expand)                                                                                                     
+                                                                                                                                        
+⏺ Created docker-compose.yml with Flask app + Metabase + PostgreSQL.                                                                    
+                                                                                                                                        
+  Quick Start                                                                                                                           
+                                                                                                                                        
+  cd /Users/rupeshpanwar/Documents/Learning/flask-app                                                                                   
+                                                                                                                                        
+  # Start all services                                                                                                                  
+  docker-compose up -d                                                                                                                  
+                                                                                                                                        
+  # Access:                                                                                                                             
+  # - Flask App: http://localhost:8080                                                                                                  
+  # - Metabase:  http://localhost:3000                                                                                                  
+                                                                                                                                        
+  Setup Steps                                                                                                                           
+                                                                                                                                        
+  1. Start services: docker-compose up -d                                                                                               
+  2. Open Metabase: http://localhost:3000                                                                                               
+  3. Initial setup wizard:                                                                                                              
+    - Create admin account                                                                                                              
+    - Connect your data source (PostgreSQL, MySQL, etc.)                                                                                
+  4. Build dashboards:                                                                                                                  
+    - Click "New" → "Question" to query data                                                                                            
+    - Save questions to dashboards                                                                                                      
+                                                                                                                                        
+  Architecture                                                                                                                          
+                                                                                                                                        
+  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐                                                                               
+  │  Flask App  │────▶│  PostgreSQL │◀────│  Metabase   │                                                                               
+  │  :8080      │     │  :5432      │     │  :3000      │                                                                               
+  └─────────────┘     └─────────────┘     └─────────────┘                                                                               
+                                                                                                                                        
+  Embedding Dashboards (Optional)                                                                                                       
+                                                                                                                                        
+  To embed Metabase charts in your Flask app:                                                                                           
+                                                                                                                                        
+  1. Enable embedding in Metabase Admin → Settings → Embedding                                                                          
+  2. Get embed URL for dashboard/question                                                                                               
+  3. Use iframe in your Flask templates  
+
+  Updated docker-compose.yml for SQLite.                                                                                                
+                                                                                                                                        
+  How It Works                                                                                                                          
+                                                                                                                                        
+  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐                                                                               
+  │  Flask App  │────▶│   SQLite    │◀────│  Metabase   │                                                                               
+  │  :8080      │     │  ./data/    │     │  :3000      │                                                                               
+  └─────────────┘     └─────────────┘     └─────────────┘                                                                               
+                                                                                                                                        
+  Both services share the ./data folder for SQLite files.                                                                               
+                                                                                                                                        
+  Usage                                                                                                                                 
+                                                                                                                                        
+  # Create data directory                                                                                                               
+  mkdir -p data                                                                                                                         
+                                                                                                                                        
+  # Start services                                                                                                                      
+  docker-compose up -d                                                                                                                  
+                                                                                                                                        
+  # Metabase: http://localhost:3000                                                                                                     
+  # Flask:    http://localhost:8080                                                                                                     
+                                                                                                                                        
+  Connect SQLite in Metabase                                                                                                            
+                                                                                                                                        
+  1. Open http://localhost:3000                                                                                                         
+  2. Complete setup wizard                                                                                                              
+  3. Add Database → SQLite                                                                                                              
+  4. Path: /data/your_database.db                                                                                                       
+                                                                                                                                        
+  Limitation                                                                                                                            
+                                                                                                                                        
+  SQLite is fine for development/small dashboards. For production with multiple users, PostgreSQL is recommended.   

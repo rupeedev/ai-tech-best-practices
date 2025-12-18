@@ -1,0 +1,15 @@
+claude mcp add --transport http notion https://mcp.notion.com/mcp
+
+to create documentation, search and find answers, manage tasks, build reports, and plan campaigns
+
+  - Name: notion                                                                                                                        
+  - Transport: HTTP                                                                                                                     
+  - URL: https://mcp.notion.com/mcp                                                                                                     
+  - Scope: Local config (project-specific)  
+
+claude mcp add http-fetch -- uvx mcp-server-fetch
+
+  - Name: http-fetch                                                                                                                    
+  - Transport: stdio (default)                                                                                                          
+  - Command: uvx mcp-server-fetch                                                                                                       
+  - Scope: Local config (project-specific) 

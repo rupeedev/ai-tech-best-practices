@@ -1,0 +1,241 @@
+MindsDB MCP Server Successfully Configured                                                                                            
+                                                                                                                                        
+| Section                     | Description                               |                                                           
+  |-----------------------------|-------------------------------------------|                                                           
+  | Step-by-Step Guide          | 6 steps from Docker setup to verification |                                                           
+  | Configuration Summary Table | Quick reference for all commands          |                                                           
+  | Management Commands         | Start, stop, restart, logs commands       |                                                           
+  | Troubleshooting             | Common issues and solutions               |                                                           
+                                                                                                                                        
+  Steps Added:                                                                                                                          
+                                                                                                                                        
+  1. Start Docker with auth - docker run with username/password                                                                         
+  2. Wait and verify status - Check API status endpoint                                                                                 
+  3. Get auth token - Login API call to get bearer token                                                                                
+  4. Add MCP to Claude CLI - claude mcp add with SSE transport                                                                          
+  5. Verify connection - claude mcp list                                                                                                
+  6. Reconfigure (optional) - Remove and re-add if token expires    
+                                                                                                                 
+                                                                                                                                        
+  Configuration Summary                                                                                                                 
+                                                                                                                                        
+  | Setting     | Value                                           |                                                                     
+  |-------------|-------------------------------------------------|                                                                     
+  | Server Name | mindsdb-local                                   |                                                                     
+  | Transport   | SSE                                             |                                                                     
+  | Endpoint    | http://localhost:47334/mcp/sse                  |                                                                     
+  | Auth Token  | pat_2DL9K5vow2OgSJTzYQpPN2eVsyQ8m828iNFwQBpXLsg |                                                                     
+                                                                                                                                        
+  Available MCP Tools                                                                                                                   
+                                                                                                                                        
+  1. mindsdb-mcp_list_databases - List all connected data sources                                                                       
+  2. mindsdb-mcp_query - Execute SQL queries across federated data                                                                      
+                                                                                                                                        
+  ---                                                                                                                                   
+  Connecting Applications to MindsDB                                                                                                    
+                                                                                                                                        
+  You can connect 200+ data sources via MindsDB's SQL interface at http://localhost:47334:                                              
+                                                                                                                                        
+  1. PostgreSQL Database                                                                                                                
+                                                                                                                                        
+  CREATE DATABASE my_postgres                                                                                                           
+  WITH ENGINE = "postgres",                                                                                                             
+  PARAMETERS = {                                                                                                                        
+      "user": "your_user",                                                                                                              
+      "password": "your_password",                                                                                                      
+      "host": "your-host.com",                                                                                                          
+      "port": "5432",                                                                                                                   
+      "database": "your_db"                                                                                                             
+  };                                                                                                                                    
+                                                                                                                                        
+  2. MySQL Database                                                                                                                     
+                                                                                                                                        
+  CREATE DATABASE my_mysql                                                                                                              
+  WITH ENGINE = "mysql",                                                                                                                
+  PARAMETERS = {                                                                                                                        
+      "user": "root",                                                                                                                   
+      "password": "password",                                                                                                           
+      "host": "localhost",                                                                                                              
+      "port": "3306",                                                                                                                   
+      "database": "mydb"                                                                                                                
+  };                                                                                                                                    
+                                                                                                                                        
+  3. Slack                                                                                                                              
+                                                                                                                                        
+  CREATE DATABASE my_slack                                                                                                              
+  WITH ENGINE = "slack",                                                                                                                
+  PARAMETERS = {                                                                                                                        
+      "token": "xoxb-your-slack-bot-token"                                                                                              
+  };                                                                                                                                    
+                                                                                                                                        
+  4. Google Sheets                                                                                                                      
+                                                                                                                                        
+  CREATE DATABASE my_sheets                                                                                                             
+  WITH ENGINE = "sheets",                                                                                                               
+  PARAMETERS = {                                                                                                                        
+      "spreadsheet_id": "your-spreadsheet-id",                                                                                          
+      "credentials": "/path/to/credentials.json"                                                                                        
+  };                                                                                                                                    
+                                                                                                                                        
+  5. BigQuery (for your MLOps project)                                                                                                  
+                                                                                                                                        
+  CREATE DATABASE my_bigquery                                                                                                           
+  WITH ENGINE = "bigquery",                                                                                                             
+  PARAMETERS = {                                                                                                                        
+      "project_id": "gen-lang-client-0622009104",                                                                                       
+      "dataset": "test_schema",                                                                                                         
+      "service_account_keys": "/path/to/service-account.json"                                                                           
+  };                                                                                                                                    
+                                                                                                                                        
+  ---                                                                                                                                   
+  Quick Test                                                                                                                            
+                                                                                                                                        
+  Restart Claude Code to activate the MCP server, then ask:                                                                             
+  - "List all databases in MindsDB"                                                                                                     
+  - "Query the us_states table"                                                                                                         
+                                                                                                                                        
+⏺ Summary                                                                                                                               
+                                                                                                                                        
+  MindsDB MCP server is now configured for Claude CLI:                                                                                  
+                                                                                                                                        
+  - Docker container running at localhost:47334                                                                                         
+  - MCP SSE endpoint connected at /mcp/sse                                                                                              
+  - Authentication configured with bearer token                                                                                         
+                                                                                                                                        
+  To use MindsDB in future sessions:                                                                                                    
+  1. Ensure Docker container is running: docker start mindsdb                                                                           
+  2. The MCP server will auto-connect when you start Claude Code                                                                        
+                                                                                                                                        
+  Note: The auth token expires periodically. If connection fails, regenerate it:                                                        
+  curl -X POST -d '{"username":"admin","password":"mindsdb123"}' \                                                                      
+    -H "Content-Type: application/json" \                                                                                               
+    http://localhost:47334/api/login                                                                                                    
+                                                                                                                                        
+  Then update the MCP config with the new token.                                                                                        
+                                                                                                                                        
+  Sources:                                                                                                                              
+  - https://docs.mindsdb.com/model-context-protocol/usage                                                                               
+  - https://docs.mindsdb.com/model-context-protocol/anthropic                                                                           
+  - https://github.com/mindsdb/mindsdb 
+
+    Web Interface URL: http://localhost:47334                                                                                             
+                                                                                                                                        
+                                                                                                          
+                                                                                                                                        
+  You can access the MindsDB Editor at http://localhost:47334 to:
+  - Connect data sources via SQL
+  - Run queries
+  - Manage databases
+
+================================================================================
+STEP-BY-STEP MCP SERVER CONFIGURATION GUIDE
+================================================================================
+
+Step 1: Start MindsDB Docker Container with Authentication
+----------------------------------------------------------
+docker run -d --name mindsdb \
+  -e MINDSDB_USERNAME=admin \
+  -e MINDSDB_PASSWORD=mindsdb123 \
+  -p 47334:47334 \
+  -p 47335:47335 \
+  mindsdb/mindsdb
+
+Step 2: Wait for MindsDB to Start (30 seconds)
+----------------------------------------------
+sleep 30
+curl -s http://localhost:47334/api/status
+
+Expected output:
+{"mindsdb_version":"25.12.0","environment":"local","auth":{"confirmed":false,"http_auth_enabled":true,"provider":"local"}}
+
+Step 3: Get Authentication Token
+--------------------------------
+curl -s -X POST -d '{"username":"admin","password":"mindsdb123"}' \
+  -H "Content-Type: application/json" \
+  http://localhost:47334/api/login
+
+Expected output:
+{"token":"pat_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}
+
+Save this token for the next step.
+
+Step 4: Add MindsDB MCP Server to Claude CLI
+--------------------------------------------
+claude mcp add mindsdb-local http://localhost:47334/mcp/sse \
+  --transport sse --scope user \
+  --header "Authorization: Bearer YOUR_TOKEN_FROM_STEP_3"
+
+Example with actual token:
+claude mcp add mindsdb-local http://localhost:47334/mcp/sse \
+  --transport sse --scope user \
+  --header "Authorization: Bearer pat_2DL9K5vow2OgSJTzYQpPN2eVsyQ8m828iNFwQBpXLsg"
+
+Step 5: Verify MCP Connection
+-----------------------------
+claude mcp list
+
+Expected output:
+✓ mindsdb-local: http://localhost:47334/mcp/sse (SSE) - Connected
+
+Step 6: (Optional) Remove and Reconfigure MCP Server
+----------------------------------------------------
+If you need to update the token or reconfigure:
+
+# Remove existing config
+claude mcp remove mindsdb-local
+
+# Add with new token
+claude mcp add mindsdb-local http://localhost:47334/mcp/sse \
+  --transport sse --scope user \
+  --header "Authorization: Bearer NEW_TOKEN"
+
+================================================================================
+CONFIGURATION SUMMARY TABLE
+================================================================================
+
+| Step | Description                  | Command                                                    |
+|------|------------------------------|-----------------------------------------------------------|
+| 1    | Start Docker with auth       | docker run -d --name mindsdb -e MINDSDB_USERNAME=admin... |
+| 2    | Wait and verify status       | curl http://localhost:47334/api/status                    |
+| 3    | Get auth token               | curl -X POST .../api/login                                |
+| 4    | Add MCP to Claude CLI        | claude mcp add mindsdb-local ... --transport sse          |
+| 5    | Verify connection            | claude mcp list                                           |
+
+================================================================================
+MANAGEMENT COMMANDS
+================================================================================
+
+# Start MindsDB container
+docker start mindsdb
+
+# Stop MindsDB container
+docker stop mindsdb
+
+# View container logs
+docker logs mindsdb
+
+# Restart container
+docker restart mindsdb
+
+# Remove container (data will be lost)
+docker rm -f mindsdb
+
+# Check container status
+docker ps --filter "name=mindsdb"
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Issue: MCP connection fails after some time
+Solution: Token expired. Regenerate token using Step 3 and update MCP config.
+
+Issue: Container won't start
+Solution: Check if port 47334 is already in use:
+  lsof -i :47334
+  # Kill the process or use different port
+
+Issue: Authentication fails
+Solution: Verify username/password match what was set in docker run command.
+
+================================================================================

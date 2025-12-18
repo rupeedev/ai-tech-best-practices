@@ -1,0 +1,252 @@
+NocoBase Overview                                                                                                                     
+                                                                                                                                        
+  NocoBase is an extensible no-code/low-code platform for building business apps with AI capabilities.                                  
+                                                                                                                                        
+  Key Features:                                                                                                                         
+  - Data model-driven (UI decoupled from data)                                                                                          
+  - Built-in AI employees (translator, analyst, assistant)                                                                              
+  - Plugin-based architecture (like WordPress)                                                                                          
+  - Visual page builder                                                                                                                 
+                                                                                                                                        
+  Quick Setup (Docker)                                                                                                                  
+                                                                                                                                        
+  Option 1: Standalone                                                                                                                  
+                                                                                                                                        
+  # Create directory                                                                                                                    
+  mkdir nocobase && cd nocobase                                                                                                         
+                                                                                                                                        
+  # Run with SQLite                                                                                                                     
+  docker run -d \                                                                                                                       
+    --name nocobase \                                                                                                                   
+    -p 13000:80 \                                                                                                                       
+    -v ./storage:/app/nocobase/storage \                                                                                                
+    nocobase/nocobase:latest                                                                                                            
+                                                                                                                                        
+  Access at: http://localhost:13000                                                                                                     
+                                                                                                                                        
+  Option 2: Docker Compose (Recommended)                                                                                                
+                                                                                                                                        
+⏺ Write(nocobase/docker-compose.yml)                                                                                                    
+  ⎿  Wrote 36 lines to nocobase/docker-compose.yml                                                                                      
+     version: '3.8'                                                                                                                     
+     services:                                                                                                                          
+       nocobase:                                                                                                                        
+         image: nocobase/nocobase:latest                                                                                                
+         ports:                                                                                                                         
+           - "13000:80"                                                                                                                 
+         environment:                                                                                                                   
+           # Database: sqlite, mysql, postgres                                                                                          
+           - DB_DIALECT=postgres                                                                                                        
+     … +26 lines (ctrl+o to expand)                                                                                                     
+                                                                                                                                        
+⏺ Created nocobase/docker-compose.yml.                                                                                                  
+                                                                                                                                        
+  Start NocoBase                                                                                                                        
+                                                                                                                                        
+  cd /Users/rupeshpanwar/Documents/Learning/flask-app/nocobase                                                                          
+                                                                                                                                        
+  # Start services                                                                                                                      
+  docker-compose up -d                                                                                                                  
+                                                                                                                                        
+  # Check logs                                                                                                                          
+  docker-compose logs -f nocobase                                                                                                       
+                                                                                                                                        
+  Access: http://localhost:13000                                                                                                        
+                                                                                                                                        
+  Initial Setup                                                                                                                         
+                                                                                                                                        
+  1. Open http://localhost:13000                                                                                                        
+  2. Create admin account                                                                                                               
+  3. Start building your app                                                                                                            
+                                                                                                                                        
+  Default Credentials                                                                                                                   
+                                                                                                                                        
+  After first run, login with:                                                                                                          
+  - Email: admin@nocobase.com                                                                                                           
+  - Password: admin123                                                                                                                  
+                                                                                                                                        
+  SQLite Version (Simpler)                                                                                                              
+                                                                                                                                        
+  If you prefer SQLite:                                                                                                                 
+                                                                                                                                        
+  # Replace environment section                                                                                                         
+  environment:                                                                                                                          
+    - DB_DIALECT=sqlite                                                                                                                 
+    - DB_STORAGE=/app/nocobase/storage/db/nocobase.db                                                                                   
+    - APP_KEY=your-secret-key-change-this                                                                                               
+                                                                                                                                        
+  Architecture                                                                                                                          
+                                                                                                                                        
+  ┌─────────────────────────────────────────┐                                                                                           
+  │              NocoBase                    │                                                                                          
+  │  ┌─────────┐  ┌─────────┐  ┌─────────┐ │                                                                                            
+  │  │  Pages  │  │  Forms  │  │   API   │ │                                                                                            
+  │  └─────────┘  └─────────┘  └─────────┘ │                                                                                            
+  │              :13000                      │                                                                                          
+  └──────────────────┬──────────────────────┘                                                                                           
+                     │                                                                                                                  
+             ┌───────▼───────┐                                                                                                          
+             │   PostgreSQL  │                                                                                                          
+             │   /SQLite     │                                                                                                          
+             └───────────────┘                                                                                                          
+                                                                                                                                        
+  NocoBase vs Metabase                                                                                                                  
+                                                                                                                                        
+  | Feature    | NocoBase       | Metabase      |                                                                                       
+  |------------|----------------|---------------|                                                                                       
+  | Purpose    | Build apps     | Dashboards/BI |                                                                                       
+  | Data entry | Yes            | No            |                                                                                       
+  | Forms      | Yes            | No            |                                                                                       
+  | Charts     | Yes            | Yes (better)  |                                                                                       
+  | Workflows  | Yes            | No            |                                                                                       
+  | Use case   | Internal tools | Analytics     |  
+
+
+  raphiti is for knowledge graph memory (storing relationships/context), not dashboards. Here's a comparison:                          
+                                                                                                                                        
+  Comparison for AI-Powered Dashboards                                                                                                  
+                                                                                                                                        
+  | Tool     | AI-Powered      | Dashboard  | Data Entry | Best For                   |                                                 
+  |----------|-----------------|------------|------------|----------------------------|                                                 
+  | Graphiti | ✅ LLM          | ❌         | ❌         | Memory/context for Claude  |                                                 
+  | Metabase | ❌              | ✅         | ❌         | BI analytics               |                                                 
+  | NocoBase | ✅ AI employees | ✅         | ✅         | Internal apps + dashboards |                                                 
+  | MindsDB  | ✅ ML/AI        | ⚠️ Limited | ❌         | AI predictions on data     |                                                 
+                                                                                                                                        
+  Best Options for AI-Powered Dashboard                                                                                                 
+                                                                                                                                        
+  Option 1: NocoBase (Recommended)                                                                                                      
+                                                                                                                                        
+  - Built-in AI employees for analysis                                                                                                  
+  - Visual dashboard builder                                                                                                            
+  - Forms + workflows + API                                                                                                             
+                                                                                                                                        
+  Option 2: MindsDB + Metabase                                                                                                          
+                                                                                                                                        
+  You already have MindsDB MCP connected! Combine:                                                                                      
+                                                                                                                                        
+  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐                                                                               
+  │  Your Data  │────▶│  MindsDB    │────▶│  Metabase   │                                                                               
+  │  (SQLite)   │     │  (AI/ML)    │     │  (Visuals)  │                                                                               
+  └─────────────┘     └─────────────┘     └─────────────┘                                                                               
+                                                                                                                                        
+  MindsDB adds AI predictions, Metabase visualizes them.                                                                                
+                                                                                                                                        
+  Option 3: All-in-One Stack                                                                                                            
+                                                                                                                                        
+⏺ Write(ai-dashboard/docker-compose.yml)                                                                                                
+  ⎿  Wrote 58 lines to ai-dashboard/docker-compose.yml                                                                                  
+     version: '3.8'                                                                                                                     
+     services:                                                                                                                          
+       # Your Flask App                                                                                                                 
+       flask-app:                                                                                                                       
+         build: ..                                                                                                                      
+         ports:                                                                                                                         
+           - "8080:8080"                                                                                                                
+         environment:                                                                                                                   
+           - APP_ENV=production                                                                                                         
+     … +48 lines (ctrl+o to expand)                                                                                                     
+                                                                                                                                        
+⏺ Write(ai-dashboard/init-db.sql)                                                                                                       
+  ⎿  Wrote 9 lines to ai-dashboard/init-db.sql                                                                                          
+     -- Create databases for each service                                                                                               
+     CREATE DATABASE metabase;                                                                                                          
+     CREATE DATABASE app_data;                                                                                                          
+     -- Grant permissions                                                                                                               
+     GRANT ALL PRIVILEGES ON DATABASE nocobase TO admin;                                                                                
+     GRANT ALL PRIVILEGES ON DATABASE metabase TO admin;                                                                                
+     GRANT ALL PRIVILEGES ON DATABASE app_data TO admin;                                                                                
+                                                                                                                                        
+⏺ Created ai-dashboard/docker-compose.yml with full stack.                                                                              
+                                                                                                                                        
+  Quick Start                                                                                                                           
+                                                                                                                                        
+  cd /Users/rupeshpanwar/Documents/Learning/flask-app/ai-dashboard                                                                      
+  docker-compose up -d                                                                                                                  
+                                                                                                                                        
+  Access Points                                                                                                                         
+                                                                                                                                        
+  | Service   | URL                    | Purpose               |                                                                        
+  |-----------|------------------------|-----------------------|                                                                        
+  | Flask App | http://localhost:8080  | Your API              |                                                                        
+  | NocoBase  | http://localhost:13000 | AI-powered apps/forms |                                                                        
+  | Metabase  | http://localhost:3001  | BI dashboards         |                                                                        
+                                                                                                                                        
+  My Recommendation                                                                                                                     
+                                                                                                                                        
+  For AI-powered dashboard: Use NocoBase                                                                                                
+                                                                                                                                        
+  Why:                                                                                                                                  
+  - Built-in AI employees (analyst, assistant)                                                                                          
+  - Natural language queries                                                                                                            
+  - Visual dashboard builder                                                                                                            
+  - Can connect to your existing data                                                                                                   
+  - Forms + workflows included                                                                                                          
+                                                                                                                                        
+  Graphiti is useful for a different purpose - giving Claude memory of your conversations and data relationships. You can use it        
+  alongside NocoBase.                                                                                                                   
+                                                                                                                                        
+  Use Graphiti For                                                                                                                      
+                                                                                                                                        
+  "Remember our app has 3 endpoints and uses PostgreSQL"                                                                                
+  "What did we decide about the dashboard architecture?"                                                                                
+                                                                                                                                        
+  Use NocoBase For                                                                                                                      
+                                                                                                                                        
+  - Build admin panels                                                                                                                  
+  - Create data entry forms                                                                                                             
+  - AI-powered data analysis                                                                                                            
+  - Visual dashboards        
+
+                                                                                                                                        
+  |              | Graphiti/GraphRAG                              | NocoBase                            |                               
+  |--------------|------------------------------------------------|-------------------------------------|                               
+  | Purpose      | AI memory & context                            | Build apps & dashboards             |                               
+  | What it does | Stores relationships, enables AI to "remember" | Visual app builder with AI features |                               
+  | Output       | Knowledge for LLM queries                      | Web apps, forms, dashboards         |                               
+  | Use case     | "What did we discuss last week?"               | "Build me an admin panel"           |                               
+                                                                                                                                        
+  When to Use Each                                                                                                                      
+                                                                                                                                        
+  Graphiti/GraphRAG                                                                                                                     
+                                                                                                                                        
+  You: "Remember that our Flask app uses PostgreSQL and has 3 endpoints"                                                                
+  Later...                                                                                                                              
+  You: "What database does our app use?"                                                                                                
+  AI: "PostgreSQL" (retrieved from knowledge graph)                                                                                     
+                                                                                                                                        
+  Best for: AI memory, context retention, relationship queries                                                                          
+                                                                                                                                        
+  NocoBase                                                                                                                              
+                                                                                                                                        
+  You: Build a dashboard showing user signups, revenue, API usage                                                                       
+  Output: Visual dashboard with charts, filters, AI analysis                                                                            
+                                                                                                                                        
+  Best for: Building actual applications and dashboards                                                                                 
+                                                                                                                                        
+  Use BOTH Together                                                                                                                     
+                                                                                                                                        
+  ┌─────────────────────────────────────────────────┐                                                                                   
+  │                   Your System                    │                                                                                  
+  ├─────────────────────────────────────────────────┤                                                                                   
+  │  Graphiti          │  NocoBase                  │                                                                                   
+  │  (AI Memory)       │  (Dashboard/Apps)          │                                                                                   
+  │                    │                            │                                                                                   
+  │  "What do we       │  Visual charts             │                                                                                   
+  │   know about       │  Data entry forms          │                                                                                   
+  │   customer X?"     │  Admin panels              │                                                                                   
+  │                    │                            │                                                                                   
+  │  Context for AI    │  User-facing interface     │                                                                                   
+  └─────────────────────────────────────────────────┘                                                                                   
+                                                                                                                                        
+  Summary                                                                                                                               
+                                                                                                                                        
+  | Need                         | Use      |                                                                                           
+  |------------------------------|----------|                                                                                           
+  | AI-powered dashboard UI      | NocoBase |                                                                                           
+  | AI memory/context for Claude | Graphiti |                                                                                           
+  | BI analytics/charts          | Metabase |                                                                                           
+  | ML predictions               | MindsDB  |                                                                                           
+                                                                                                                                        
+  Bottom line: Use NocoBase for your dashboard. Use Graphiti if you want Claude to remember project context across sessions.                                                                                                           
+                                                                                                                                        

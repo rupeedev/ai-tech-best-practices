@@ -1,0 +1,127 @@
+Graphiti MCP Server Successfully Configured
+
+                                                                                                                                       
+  Configuration Steps Added                                                                                                             
+                                                                                                                                        
+  | Step | Description       | Command                                                                          |                       
+  |------|-------------------|----------------------------------------------------------------------------------|                       
+  | 1    | Clone repository  | git clone --depth 1 https://github.com/getzep/graphiti.git graphiti-mcp          |                       
+  | 2    | Create .env file  | Add OpenAI API key and FalkorDB config                                           |                       
+  | 3    | Start Docker      | docker compose -f docker-compose.yml up -d                                       |                       
+  | 4    | Verify container  | docker ps --filter "name=graphiti"                                               |                       
+  | 5    | Add to Claude CLI | claude mcp add graphiti http://localhost:8000/mcp/ --transport http --scope user |                       
+  | 6    | Verify connection | claude mcp list         
+
+  Status: ✅ Connected
+
+================================================================================
+STEP-BY-STEP CONFIGURATION GUIDE
+================================================================================
+
+Step 1: Clone the Graphiti Repository
+--------------------------------------
+cd /tmp
+git clone --depth 1 https://github.com/getzep/graphiti.git graphiti-mcp
+
+Step 2: Create Environment Configuration File
+----------------------------------------------
+Create .env file at /tmp/graphiti-mcp/mcp_server/.env with:
+
+# Graphiti MCP Server Environment Configuration
+
+# OpenAI API Configuration (REQUIRED)
+OPENAI_API_KEY=your_openai_api_key_here
+MODEL_NAME=gpt-4o-mini
+
+# FalkorDB Configuration (bundled in Docker)
+FALKORDB_DATABASE=graphiti_db
+GRAPHITI_GROUP_ID=main
+
+# Concurrency Control (adjust based on your OpenAI tier)
+SEMAPHORE_LIMIT=10
+
+Step 3: Start the Graphiti MCP Server with Docker
+-------------------------------------------------
+cd /tmp/graphiti-mcp/mcp_server/docker
+docker compose -f docker-compose.yml up -d
+
+Step 4: Verify Container is Running
+-----------------------------------
+docker ps --filter "name=graphiti"
+
+Expected output shows container running on ports:
+- 8000 (MCP Server)
+- 6379 (FalkorDB)
+- 3000 (FalkorDB UI)
+
+Step 5: Add Graphiti MCP to Claude CLI
+--------------------------------------
+claude mcp add graphiti http://localhost:8000/mcp/ --transport http --scope user
+
+Step 6: Verify MCP Connection
+-----------------------------
+claude mcp list
+
+Expected output:
+✓ graphiti: http://localhost:8000/mcp/ (HTTP) - Connected
+
+================================================================================
+
+  Configuration Summary                                                                                                                 
+                                                                                                                                        
+  | Setting        | Value                      |                                                                                       
+  |----------------|----------------------------|                                                                                       
+  | Server Name    | graphiti                   |                                                                                       
+  | Transport      | HTTP                       |                                                                                       
+  | Endpoint       | http://localhost:8000/mcp/ |                                                                                       
+  | Graph Database | FalkorDB (bundled)         |                                                                                       
+  | LLM Provider   | OpenAI (gpt-4o-mini)       |                                                                                       
+                                                                                                                                        
+  Services Running                                                                                                                      
+                                                                                                                                        
+  | Service     | Port | Description                |                                                                                   
+  |-------------|------|----------------------------|                                                                                   
+  | MCP Server  | 8000 | Graphiti MCP endpoint      |                                                                                   
+  | FalkorDB    | 6379 | Redis-based graph database |                                                                                   
+  | FalkorDB UI | 3000 | Web-based graph explorer   |                                                                                   
+                                                                                                                                        
+  Available MCP Tools                                                                                                                   
+                                                                                                                                        
+  Graphiti provides these knowledge graph tools:                                                                                        
+                                                                                                                                        
+  1. add_episode - Add new information to the knowledge graph                                                                           
+  2. search_nodes - Search for entities in the graph                                                                                    
+  3. search_edges - Search for relationships between entities                                                                           
+  4. get_entity_edge - Get edges for a specific entity                                                                                  
+  5. delete_entity_edge - Remove entity or relationship                                                                                 
+  6. clear_graph - Clear the entire knowledge graph                                                                                     
+                                                                                                                                        
+  Usage Example                                                                                                                         
+                                                                                                                                        
+  After restarting Claude Code, you can use Graphiti to build a knowledge graph:                                                        
+                                                                                                                                        
+  "Remember that John is the CTO of Acme Corp and reports to Jane who is the CEO"                                                       
+  "What do you know about John?"                                                                                                        
+  "What is the relationship between John and Jane?"                                                                                     
+                                                                                                                                        
+  All Connected MCP Servers                                                                                                             
+                                                                                                                                        
+  ✓ mindsdb-local  - Federated data queries (200+ sources)                                                                              
+  ✓ graphiti      - Knowledge graph memory                                                                                              
+  ✓ security-scanner - Security analysis                                                                                                
+                                                                                                                                        
+  Management Commands                                                                                                                   
+                                                                                                                                        
+  # Start Graphiti                                                                                                                      
+  cd /tmp/graphiti-mcp/mcp_server/docker && docker compose up -d                                                                        
+                                                                                                                                        
+  # Stop Graphiti                                                                                                                       
+  docker compose -f /tmp/graphiti-mcp/mcp_server/docker/docker-compose.yml down                                                         
+                                                                                                                                        
+  # View FalkorDB UI                                                                                                                    
+  open http://localhost:3000                                                                                                            
+                                                                                                                                        
+  Sources:                                                                                                                              
+  - https://github.com/getzep/graphiti/tree/main/mcp_server                                                                             
+  - https://docs.getzep.com 
+
