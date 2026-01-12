@@ -34,3 +34,6 @@ claude-setup-ikanban.json
 # OS files
 .DS_Store
 Thumbs.db
+ikanban.py
+server.py
+cli.py
