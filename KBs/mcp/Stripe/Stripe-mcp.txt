@@ -1,0 +1,77 @@
+claude mcp add --transport http stripe https://mcp.stripe.com
+
+
+stripe: https://mcp.stripe.com (HTTP) - Needs authentication
+
+  Next Step: Restart Claude Code and authenticate with Stripe when prompted.
+
+  Stripe MCP allows you to:
+  - Manage customers and subscriptions
+  - Process payments and refunds
+  - View transaction history
+  - Handle invoices and billing
+  - Manage products and prices
+
+## Common Commands
+
+### List Customers
+mcp__stripe__list_customers
+  - limit: 10
+  - email: "customer@example.com"
+
+### Create Customer
+mcp__stripe__create_customer
+  - email: "newcustomer@example.com"
+  - name: "John Doe"
+  - description: "Premium customer"
+
+### List Payments
+mcp__stripe__list_payments
+  - customer: "cus_xxx"
+  - limit: 20
+
+### Create Payment Intent
+mcp__stripe__create_payment_intent
+  - amount: 1000
+  - currency: "usd"
+  - customer: "cus_xxx"
+
+### List Subscriptions
+mcp__stripe__list_subscriptions
+  - customer: "cus_xxx"
+  - status: "active"
+
+### Create Subscription
+mcp__stripe__create_subscription
+  - customer: "cus_xxx"
+  - price: "price_xxx"
+
+### List Invoices
+mcp__stripe__list_invoices
+  - customer: "cus_xxx"
+  - status: "paid"
+
+### Create Refund
+mcp__stripe__create_refund
+  - payment_intent: "pi_xxx"
+  - amount: 500
+
+## Use Cases
+
+### Payment Operations
+- Process one-time payments
+- Setup recurring billing
+- Handle refunds and disputes
+- Generate payment reports
+
+### Customer Management
+- Create customer profiles
+- Track payment history
+- Manage subscriptions
+- Update billing information
+
+### Product Catalog
+- Create products and prices
+- Manage pricing tiers
+- Setup promotional discounts
+- Configure trial periods

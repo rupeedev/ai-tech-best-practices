@@ -1,0 +1,327 @@
+Configure Obsidian MCP for Claude Code on macOS
+-----------------------------------------------
+Project: Schild
+Date: 2025-12-23
+Status: Verified Working
+
+OVERVIEW
+--------
+This tutorial guides you through configuring the mcp-obsidian server to work
+with Claude Code CLI on macOS. This enables Claude to read, write, and search
+your Obsidian vault directly.
+
+PREREQUISITES
+-------------
+| Requirement          | Version/Details                              |
+|---------------------|----------------------------------------------|
+| macOS               | Any recent version                           |
+| Obsidian            | Installed and running locally                |
+| Claude Code CLI     | Installed and authenticated                  |
+| Python/uv           | For uvx command (installed with Claude Code) |
+
+STARTUP ORDER (Important)
+-------------------------
+MCP servers connect during Claude Code startup. For reliable connection:
+
+1. Open Obsidian FIRST (ensures REST API is available)
+2. Then start Claude Code
+
+If Claude Code was started before Obsidian, restart Claude Code after
+opening Obsidian.
+
+STEP 1: Install Obsidian Local REST API Plugin
+----------------------------------------------
+1. Open Obsidian
+2. Go to Settings (gear icon or Cmd+,)
+3. Navigate to: Community plugins
+4. Click "Browse" button
+5. Search for: "Local REST API"
+6. Click "Install" on the plugin by Adam Coddington
+7. Click "Enable" to activate the plugin
+
+STEP 2: Configure the REST API Plugin
+-------------------------------------
+1. In Obsidian Settings, find "Local REST API" under Community plugins
+2. Note the following information displayed:
+
+   | Setting              | Value                        |
+   |---------------------|------------------------------|
+   | HTTP API URL        | http://127.0.0.1:27123/      |
+   | HTTPS API URL       | https://127.0.0.1:27124/     |
+   | API Key             | (long alphanumeric string)   |
+
+3. Enable "Non-encrypted (HTTP) Server" toggle for local use
+4. Copy the API Key - you will need this for Step 3
+
+IMPORTANT: The API Key is shown in the plugin settings page. Example format:
+YOUR_OBSIDIAN_API_KEY_HERE
+
+STEP 3: Ensure uvx is in PATH
+-----------------------------
+The mcp-obsidian server requires `uvx` (from the `uv` Python package manager).
+
+Check if uvx is available:
+  which uvx
+
+If uvx is not found but uv is installed at ~/.local/bin/, add to your ~/.zshrc:
+  export PATH="$HOME/.local/bin:$PATH"
+
+Then reload: source ~/.zshrc
+
+If uv is not installed at all:
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+
+STEP 4: Add Obsidian MCP Server to Claude Code
+----------------------------------------------
+Open your terminal and run:
+
+claude mcp add mcp-obsidian \
+  --env OBSIDIAN_API_KEY=YOUR_API_KEY_HERE \
+  --env OBSIDIAN_HOST=127.0.0.1 \
+  --env OBSIDIAN_PORT=27123 \
+  -- uvx mcp-obsidian
+
+Replace YOUR_API_KEY_HERE with your actual API key from Step 2.
+
+Example with actual key:
+
+claude mcp add mcp-obsidian \
+  --env OBSIDIAN_API_KEY=YOUR_OBSIDIAN_API_KEY_HERE \
+  --env OBSIDIAN_HOST=127.0.0.1 \
+  --env OBSIDIAN_PORT=27123 \
+  -- uvx mcp-obsidian
+
+ALTERNATIVE: If uvx is still not found in PATH, use full path:
+
+claude mcp add mcp-obsidian \
+  --env OBSIDIAN_API_KEY=YOUR_API_KEY_HERE \
+  --env OBSIDIAN_HOST=127.0.0.1 \
+  --env OBSIDIAN_PORT=27123 \
+  -- /Users/YOUR_USERNAME/.local/bin/uvx mcp-obsidian
+
+Replace YOUR_USERNAME with your actual macOS username (e.g., rupeshpanwar).
+
+STEP 5: Restart Claude Code
+---------------------------
+IMPORTANT: Obsidian must be running BEFORE starting Claude Code.
+The MCP server connects to the REST API during Claude Code startup.
+
+1. Ensure Obsidian is open and running
+2. Exit current Claude Code session: type "exit" or press Ctrl+C
+3. Start Claude Code again: claude
+
+STEP 6: Verify Connection
+-------------------------
+1. Check MCP server status:
+   claude mcp list
+
+   Expected output should show:
+   mcp-obsidian: uvx mcp-obsidian - Connected
+
+2. Test API connection manually (optional):
+   curl -s http://127.0.0.1:27123/ \
+     -H "Authorization: Bearer YOUR_API_KEY" | jq .status
+
+   Expected output: "OK"
+
+3. Test in Claude Code:
+   Ask: "List my Obsidian vault folders"
+
+AVAILABLE MCP TOOLS
+-------------------
+Once configured, these Obsidian tools become available in Claude Code:
+
+| Tool                    | Purpose                                      |
+|------------------------|----------------------------------------------|
+| list_files_in_vault    | List all files in vault root                 |
+| list_files_in_dir      | List files in a specific directory           |
+| get_file_contents      | Read content of a specific file              |
+| search                 | Search across all vault files                |
+| patch_content          | Insert content relative to headings/blocks   |
+| append_content         | Add content to new or existing files         |
+| delete_file            | Remove files or directories                  |
+
+USAGE EXAMPLES
+--------------
+In Claude Code, you can now:
+
+1. List vault root directory:
+   "List my Obsidian vault folders"
+
+2. Read a specific note:
+   "Read the file Schild/Database-For-App.md from my vault"
+
+3. Search vault:
+   "Search my vault for notes about 'project planning'"
+
+4. Append to a note:
+   "Add a new section to my daily note"
+
+TROUBLESHOOTING
+---------------
+
+QUICK DIAGNOSTICS (Run These First)
+-----------------------------------
+# 1. Check MCP server status
+claude mcp list
+# Look for: mcp-obsidian: uvx mcp-obsidian - Connected (or Failed to connect)
+
+# 2. Check if Obsidian is running
+pgrep -x Obsidian
+# Should return a PID number (e.g., 85483)
+
+# 3. Check if REST API is responding
+curl -s http://127.0.0.1:27123/ | head -3
+# Should return: {"status": "OK", ...}
+
+# 4. Test API with authentication
+curl -s http://127.0.0.1:27123/vault/ \
+  -H "Authorization: Bearer YOUR_API_KEY" | head -5
+# Should return vault file listing
+
+Error: API request failed: 404 Not Found
+----------------------------------------
+Cause: Obsidian REST API plugin not running or wrong port
+Fix:   1. Open Obsidian
+       2. Ensure Local REST API plugin is enabled
+       3. Verify HTTP server is enabled on port 27123
+       4. Restart Claude Code
+
+Error: Connection refused
+-------------------------
+Cause: Obsidian is not running or REST API plugin is disabled
+Fix:   1. Open Obsidian
+       2. Ensure Local REST API plugin is enabled
+       3. Restart Claude Code
+
+Error: Unauthorized / 401
+-------------------------
+Cause: API key mismatch
+Fix:   1. Check API key in Obsidian plugin settings
+       2. Re-add MCP server with correct key (see Reconfiguration)
+       3. Restart Claude Code
+
+MCP shows "Connected" but tools return "fetch failed"
+-----------------------------------------------------
+Cause: Environment variables not passed correctly during setup
+Fix:   1. Remove: claude mcp remove mcp-obsidian
+       2. Re-add with correct syntax (see Step 3)
+       3. Restart Claude Code
+
+MCP shows "Failed to connect"
+-----------------------------
+This can happen even when Obsidian is running. First run diagnostics:
+
+Diagnostic commands:
+   # Check if Obsidian is running
+   pgrep -x Obsidian
+
+   # Check if REST API is responding
+   curl -s http://127.0.0.1:27123/ | head -3
+
+   # Expected output: {"status": "OK", ...}
+
+If Obsidian IS running and API responds "OK":
+Cause: MCP server failed to initialize during Claude Code startup
+Fix:   Re-add the MCP server and restart Claude Code:
+
+       claude mcp remove mcp-obsidian
+       claude mcp add mcp-obsidian \
+         --env OBSIDIAN_API_KEY=YOUR_API_KEY \
+         --env OBSIDIAN_HOST=127.0.0.1 \
+         --env OBSIDIAN_PORT=27123 \
+         -- uvx mcp-obsidian
+
+       Then restart Claude Code (exit and run 'claude' again)
+
+If Obsidian is NOT running:
+Cause: Obsidian must be open for the REST API to be available
+Fix:   1. Open Obsidian
+       2. Restart Claude Code
+
+If curl returns "Connection refused":
+Cause: REST API plugin not enabled or wrong port
+Fix:   1. Open Obsidian Settings > Community plugins > Local REST API
+       2. Ensure "Non-encrypted (HTTP) Server" is enabled
+       3. Verify port is 27123
+       4. Restart Claude Code
+
+If uvx command not found:
+Cause: uv/uvx not installed OR not in PATH
+Fix:   1. Check if uvx exists: ls ~/.local/bin/uvx
+       2. If exists but not in PATH, add to ~/.zshrc:
+          export PATH="$HOME/.local/bin:$PATH"
+       3. Reload shell: source ~/.zshrc
+       4. OR reconfigure MCP with full path:
+          claude mcp remove mcp-obsidian
+          claude mcp add mcp-obsidian \
+            --env OBSIDIAN_API_KEY=YOUR_API_KEY \
+            --env OBSIDIAN_HOST=127.0.0.1 \
+            --env OBSIDIAN_PORT=27123 \
+            -- /Users/YOUR_USERNAME/.local/bin/uvx mcp-obsidian
+       5. If uvx doesn't exist at all, install uv:
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+
+RECONFIGURATION
+---------------
+If you need to update the configuration (e.g., API key changed):
+
+1. Remove existing server:
+   claude mcp remove mcp-obsidian
+
+2. Add with new configuration:
+   claude mcp add mcp-obsidian \
+     --env OBSIDIAN_API_KEY=NEW_API_KEY \
+     --env OBSIDIAN_HOST=127.0.0.1 \
+     --env OBSIDIAN_PORT=27123 \
+     -- uvx mcp-obsidian
+
+3. Restart Claude Code
+
+RESULTING CONFIGURATION
+-----------------------
+After setup, the following is saved to ~/.claude.json:
+
+Standard configuration (uvx in PATH):
+{
+  "mcp-obsidian": {
+    "type": "stdio",
+    "command": "uvx",
+    "args": ["mcp-obsidian"],
+    "env": {
+      "OBSIDIAN_API_KEY": "your-api-key",
+      "OBSIDIAN_HOST": "127.0.0.1",
+      "OBSIDIAN_PORT": "27123"
+    }
+  }
+}
+
+Full path configuration (if uvx not in PATH):
+{
+  "mcp-obsidian": {
+    "type": "stdio",
+    "command": "/Users/YOUR_USERNAME/.local/bin/uvx",
+    "args": ["mcp-obsidian"],
+    "env": {
+      "OBSIDIAN_API_KEY": "your-api-key",
+      "OBSIDIAN_HOST": "127.0.0.1",
+      "OBSIDIAN_PORT": "27123"
+    }
+  }
+}
+
+SECURITY NOTES
+--------------
+- The API key provides full access to your vault - keep it secure
+- HTTP (port 27123) is unencrypted - use only for local connections
+- HTTPS (port 27124) requires certificate setup for browser/external access
+- The REST API only listens on localhost (127.0.0.1) by default
+
+REFERENCES
+----------
+- MCP Package (GitHub): https://github.com/MarkusPfundstein/mcp-obsidian
+- Obsidian REST API Plugin: https://github.com/coddingtonbear/obsidian-local-rest-api
+- Claude Code MCP Docs: https://docs.anthropic.com/en/docs/claude-code
+
+--- END ---
+

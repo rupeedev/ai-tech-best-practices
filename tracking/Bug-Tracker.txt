@@ -1,0 +1,15 @@
+| Layer                | Status                                                 |
+  |----------------------|--------------------------------------------------------|
+  | SQLite DB            | 50 change records available                            |
+  | API (/api/changes)   | Returns all 50 records correctly                       |
+  | Frontend ChangesFeed | Only shows real-time WebSocket changes, not historical |
+
+  The Issue: The ChangesFeed component uses useWebSocket() which only displays NEW changes received via WebSocket. It does not fetch historical changes from /api/changes on load.
+
+  The data pipeline (SQLite → API → Frontend) works, but the frontend is missing the initial fetch of historical data.
+
+  To fix this, the ChangesFeed component (or a Changes page) should:
+  1. Fetch historical changes from /api/changes on mount
+  2. Then append real-time changes from WebSocket
+
+  Would you like me to add this functionality to load historical changes from the database?

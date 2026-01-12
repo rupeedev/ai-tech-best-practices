@@ -1,0 +1,122 @@
+LinkedIn Article: Building Reliable AI Agents with Temporal
+
+  ---
+  From Chaos to Clarity: How Temporal Makes Designing, Validating, and Running AI Workflows Effortless
+
+  I just finished testing a Temporal-powered AI Agent, and I have to say—it's flawless. The experience of watching workflows execute reliably, seeing every step in the Event History, and having complete visibility into the system was remarkable. Here's what I learned about building production-grade agentic applications.
+
+  ---
+  The Problem with Traditional Agentic AI
+
+  Building AI agents sounds exciting until you face reality:
+
+  Complex orchestration challenges:
+  - Coordinating interactions across distributed data stores and tools
+  - Managing state over long periods
+  - Supporting human-in-the-loop approvals
+  - Scaling to handle enterprise workloads
+
+  Inherent unreliability:
+  - Dozens of failure-prone services with request timeouts
+  - LLMs returning probabilistic (sometimes invalid) responses
+  - Rate limiting from AI providers
+
+  Debugging nightmares:
+  - Limited visibility into agent performance
+  - Troubleshooting across disparate services
+  - Testing pre-production is nearly impossible
+
+  As Manuela Veloso, Head of AI Research at J.P. Morgan, puts it: "We're going to have multiple robots and multiple humans interacting...it's a distributed system of intelligence, where agents—human and robotic—cooperate seamlessly."
+
+  The question is: How do you make that seamless cooperation actually work?
+
+  ---
+  Enter Temporal: Your Reliable, Scalable AI Orchestrator
+
+  Temporal transforms how we build agentic applications. Here's what made my experience so smooth:
+
+  1. Write Business Logic, Not Plumbing Code
+
+  With Temporal, I focused entirely on what my agent should do—not how to handle failures, retries, or state management. The workflow code reads like a straightforward sequence of steps:
+
+  → User selects a goal
+  → System prepares tools
+  → User provides prompts
+  → System executes tools
+  → Goal complete? Move to next goal
+
+  No dead letter queues. No message buses. No cron jobs for session management. The workflow is the source of truth.
+
+  2. Durable Execution Makes Failures Irrelevant
+
+  When I tested flight searches and invoice generation, I didn't worry about:
+  - API timeouts → Temporal retries automatically
+  - Invalid LLM responses → Activities self-heal until valid data returns
+  - Service crashes → State persists, execution resumes exactly where it left off
+
+  This is what "Durable Execution" means in practice—your agent survives anything.
+
+  3. Complete Visibility Through Event History
+
+  The screenshot below shows my actual workflow execution. Every activity—agent_toolPlanner, agent_validatePrompt, user_prompt, FindEvents, SearchFlights—is recorded with timestamps and results.
+
+  For debugging? Revolutionary. For compliance? Essential. For sleeping well at night? Priceless.
+
+  ---
+  The Architecture Transformation
+
+  Before Temporal:
+  Customer → Chat UI → API → Message Bus → LLM Orchestration
+                          ↓
+                Dead Letter Queue ← Cron Jobs
+                          ↓
+                     Database (state)
+  Multiple failure points. Complex integrations. State scattered everywhere.
+
+  After Temporal:
+  Customer → Chat UI → Temporal Workflow
+                          ↓
+                Activities (LLM, Tools)
+                          ↓
+                Event History (source of truth)
+  Clean. Simple. Reliable.
+
+  ---
+  Why This Matters for Personal AND Corporate Use Cases
+
+  For Personal Projects:
+  - Get started quickly with Python, Go, TypeScript, Java, or .NET
+  - Use standard test frameworks—no special tooling required
+  - Free tier available on Temporal Cloud
+
+  For Enterprise:
+  - Battle-tested by Netflix, DoorDash, NVIDIA, Shopify, Cloudflare, and hundreds more
+  - Near-infinite scalability
+  - Security, encryption, and predictable low latency
+  - Complete audit trail for compliance
+
+  ---
+  Key Takeaways
+
+  1. Temporal solves the hard problems so you can focus on building intelligent agents
+  2. Durability is built-in—stop writing retry logic and error handlers
+  3. Complete visibility—every interaction is logged and queryable
+  4. Human-in-the-loop is native with Signals and Queries
+  5. Test naturally using your language's standard test framework
+
+  ---
+  My Results
+
+  After testing the Temporal AI Agent for event discovery, flight booking, and invoice generation:
+
+  - Zero failures in production-like conditions
+  - Complete traceability of every decision the agent made
+  - Instant debugging when I needed to understand agent behavior
+  - Confidence that this architecture scales from prototype to production
+
+  If you're building agentic AI applications and struggling with reliability, observability, or scale—give Temporal a serious look. It changed how I think about AI orchestration.
+
+  ---
+  Have you tried building AI agents with workflow orchestration? I'd love to hear about your experiences in the comments.
+
+  #AI #ArtificialIntelligence #AgenticAI #Temporal #Workflows #SoftwareEngineering #MachineLearning #DevOps #CloudComputing #Automation

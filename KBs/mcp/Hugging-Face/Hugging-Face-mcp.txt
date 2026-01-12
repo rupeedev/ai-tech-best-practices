@@ -1,0 +1,47 @@
+claude mcp add --transport http hugging-face https://huggingface.co/mcp
+
+
+hugging-face: https://huggingface.co/mcp (HTTP) - Connected
+
+  Next Step: Restart Claude Code if needed. Authentication may be required for some features.
+
+  Hugging Face MCP allows you to:
+  - Search models, datasets, and spaces
+  - Access model information and metadata
+  - Download model files
+  - Explore ML/AI resources
+  - Get model documentation
+
+## Common Commands
+
+### Search Models
+mcp__hugging-face__search_models
+  - query: "text-generation"
+  - filter: "task"
+
+### Get Model Info
+mcp__hugging-face__get_model
+  - model_id: "meta-llama/Llama-2-7b"
+
+### Search Datasets
+mcp__hugging-face__search_datasets
+  - query: "sentiment analysis"
+
+### List Spaces
+mcp__hugging-face__list_spaces
+  - sort: "likes"
+  - limit: 10
+
+## Use Cases
+
+### AI/ML Development
+- Find pre-trained models for your task
+- Compare model performance metrics
+- Download model weights and configs
+- Explore dataset options for training
+
+### Research
+- Search for state-of-the-art models
+- Access model cards and documentation
+- Find benchmark datasets
+- Explore community spaces and demos

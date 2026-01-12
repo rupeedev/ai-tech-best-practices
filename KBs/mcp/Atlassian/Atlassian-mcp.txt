@@ -1,0 +1,61 @@
+claude mcp add --transport sse atlassian https://mcp.atlassian.com/v1/sse
+
+
+atlassian: https://mcp.atlassian.com/v1/sse (SSE) - Needs authentication
+
+  Next Step: Restart Claude Code and authenticate with Atlassian when prompted.
+
+  Atlassian MCP allows you to:
+  - Manage Jira issues and projects
+  - Access Confluence pages and spaces
+  - Search across Atlassian products
+  - Create and update tickets
+  - Manage sprints and boards
+
+## Common Commands
+
+### Jira - List Issues
+mcp__atlassian__jira_list_issues
+  - project: "PROJECT-KEY"
+  - status: "In Progress"
+
+### Jira - Create Issue
+mcp__atlassian__jira_create_issue
+  - project: "PROJECT-KEY"
+  - summary: "Issue title"
+  - description: "Issue description"
+  - type: "Task"
+
+### Jira - Update Issue
+mcp__atlassian__jira_update_issue
+  - issue_key: "PROJECT-123"
+  - status: "Done"
+
+### Confluence - Search Pages
+mcp__atlassian__confluence_search
+  - query: "documentation"
+  - space: "SPACE-KEY"
+
+### Confluence - Get Page
+mcp__atlassian__confluence_get_page
+  - page_id: "12345"
+
+### Confluence - Create Page
+mcp__atlassian__confluence_create_page
+  - space: "SPACE-KEY"
+  - title: "New Page Title"
+  - content: "Page content in markdown"
+
+## Use Cases
+
+### Project Management
+- Track sprint progress
+- Create and assign issues
+- Monitor team workload
+- Generate status reports
+
+### Documentation
+- Search knowledge base
+- Create technical docs
+- Update runbooks
+- Link issues to documentation

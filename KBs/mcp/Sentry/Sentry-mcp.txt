@@ -1,0 +1,81 @@
+claude mcp add --transport http sentry https://mcp.sentry.dev/mcp
+
+
+sentry: https://mcp.sentry.dev/mcp (HTTP) - Needs authentication
+
+  Next Step: Restart Claude Code and authenticate with Sentry when prompted.
+
+  Sentry MCP allows you to:
+  - View and manage error reports
+  - Track application performance
+  - Monitor release health
+  - Analyze crash reports
+  - Manage alerts and notifications
+
+## Common Commands
+
+### List Issues
+mcp__sentry__list_issues
+  - project: "my-project"
+  - status: "unresolved"
+
+### Get Issue Details
+mcp__sentry__get_issue
+  - issue_id: "12345"
+
+### Resolve Issue
+mcp__sentry__resolve_issue
+  - issue_id: "12345"
+  - status: "resolved"
+
+### List Events
+mcp__sentry__list_events
+  - project: "my-project"
+  - issue_id: "12345"
+
+### Search Errors
+mcp__sentry__search_errors
+  - query: "TypeError"
+  - project: "my-project"
+  - time_range: "24h"
+
+### List Projects
+mcp__sentry__list_projects
+  - organization: "my-org"
+
+### Get Performance Data
+mcp__sentry__get_performance
+  - project: "my-project"
+  - transaction: "/api/users"
+
+### Create Alert
+mcp__sentry__create_alert
+  - project: "my-project"
+  - name: "High Error Rate"
+  - conditions: "error_rate > 5%"
+
+## Use Cases
+
+### Error Monitoring
+- Track application errors in real-time
+- Identify recurring issues
+- Prioritize bugs by impact
+- Get stack traces and context
+
+### Performance Monitoring
+- Monitor transaction performance
+- Identify slow endpoints
+- Track performance regressions
+- Analyze user experience metrics
+
+### Release Management
+- Track release health
+- Monitor adoption rates
+- Identify release-specific issues
+- Compare release performance
+
+### Incident Response
+- Get real-time alerts
+- Quickly identify root causes
+- Track resolution progress
+- Post-mortem analysis

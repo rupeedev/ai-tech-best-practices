@@ -1,0 +1,80 @@
+claude mcp add --transport stdio db -- npx -y @bytebase/dbhub \
+  --dsn "postgresql://username:password@hostname:5432/database"
+
+
+db: npx -y @bytebase/dbhub --dsn postgresql://username:password@hostname:5432/database - Failed to connect
+
+  Next Step: Update DSN with valid database credentials and hostname, then restart Claude Code.
+
+  DB MCP (via Bytebase DBHub) allows you to:
+  - Query PostgreSQL databases
+  - List tables and schemas
+  - Describe table structures
+  - Execute read-only queries
+  - Explore database metadata
+
+## Configuration
+
+### DSN Format
+postgresql://username:password@hostname:port/database
+
+### Example DSN Values
+- Local: postgresql://user:pass@localhost:5432/mydb
+- Remote: postgresql://user:password@db.example.com:5432/production
+- With SSL: postgresql://user:pass@host:5432/db?sslmode=require
+
+## Common Commands
+
+### List Tables
+mcp__db__list_tables
+  - schema: "public"
+
+### Describe Table
+mcp__db__describe_table
+  - table: "users"
+  - schema: "public"
+
+### Execute Query
+mcp__db__query
+  - sql: "SELECT * FROM users LIMIT 10"
+
+### List Schemas
+mcp__db__list_schemas
+
+### Get Table Stats
+mcp__db__table_stats
+  - table: "orders"
+
+### List Indexes
+mcp__db__list_indexes
+  - table: "users"
+
+### List Foreign Keys
+mcp__db__list_foreign_keys
+  - table: "orders"
+
+## Use Cases
+
+### Data Analysis
+- Run analytical queries
+- Explore data patterns
+- Generate reports
+- Validate data quality
+
+### Development
+- Understand schema structure
+- Check table relationships
+- Test query performance
+- Debug data issues
+
+### Database Administration
+- Review table sizes
+- Check index usage
+- Analyze query patterns
+- Monitor table growth
+
+## Security Notes
+- Use read-only credentials when possible
+- Never expose production credentials in shared configs
+- Consider connection pooling for high-traffic scenarios
+- Use SSL/TLS for remote connections

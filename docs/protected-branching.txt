@@ -1,0 +1,155 @@
+# GitLab Protected Branching & Merge Request Configuration
+
+## Environment Type
+Development/Learning - Balanced approach with essential protections but relaxed approval requirements
+
+## Current GitLab Configuration
+
+### 1. Protected Environments
+Location: Settings > CI/CD > Protected environments
+
+**dev environment:**
+- Status: Protected
+- Deployment rules: 1
+- Approval rules: 0 (No approvals required)
+- Purpose: Fast iteration and testing for development
+
+**production environment:**
+- Status: Protected
+- Deployment rules: 1
+- Approval rules: 3 (Requires approvals)
+- Purpose: Controlled production deployments
+
+**Approval Options:**
+- "Allow pipeline triggerer to approve deployment": Unchecked
+
+### 2. Merge Request Settings
+Location: Settings > Merge requests
+
+**Merge Method:**
+- Selected: Merge commit
+- Creates a merge commit for every merge
+- Preserves full commit history
+
+**Merge Options:**
+- ✅ Show link to create or view a merge request when pushing from command line
+- ✅ Enable "Delete source branch" option by default
+  - Auto-deletes feature branches after merge to keep repo clean
+  - Existing merge requests and protected branches are not affected
+
+**Squash Commits When Merging:**
+- Selected: Allow
+- Checkbox is visible and unselected by default
+- Users can optionally squash commits on a per-MR basis
+
+**Merge Checks:**
+- ✅ Pipelines must succeed
+  - Prevents merging if the latest pipeline did not succeed or is still running
+  - CRITICAL: Ensures only passing code gets merged to main
+- ✅ All threads must be resolved
+  - Ensures all code review discussions are addressed before merging
+
+### 3. Merge Request Approvals
+Location: Settings > Merge requests > Merge request approvals
+
+**Approval Rules:**
+- Total approval rules: 0
+- Minimum required approvals: 0
+- No approval bottlenecks for dev environment
+
+**Approvers:**
+- Coverage-Check: Disabled
+
+**Approval Settings:**
+- ⬜ Prevent approval by merge request creator (unchecked)
+- ⬜ Prevent approvals by users who add commits (unchecked)
+- ⬜ Prevent editing approval rules in merge requests (unchecked)
+- ⬜ Require user re-authentication (password or SAML) to approve (unchecked)
+
+**When a commit is added:**
+- Selected: Remove all approvals
+- Ensures fresh review when code changes
+
+### 4. Protected Branches
+Location: Settings > Repository > Protected branches
+
+**Recommended Configuration for main branch:**
+- Allowed to merge: Developers + Maintainers
+- Allowed to push: No one (forces merge request workflow)
+- Allowed to force push: Disabled
+- Code owner approval: Optional (not required for dev)
+
+**Setup Steps:**
+1. Go to: Settings > Repository > Protected branches
+2. Click "Add protected branch"
+3. Select 'main' from dropdown
+4. Configure:
+   - Allowed to merge: Developers + Maintainers
+   - Allowed to push: No one
+   - Allowed to force push: Toggle OFF
+5. Click "Protect"
+
+## Recommended Git Workflow
+
+### Feature Development Flow
+```bash
+# 1. Create feature branch from main
+git checkout -b feature/my-feature
+
+# 2. Make changes and commit
+git add .
+git commit -m "Add new feature"
+
+# 3. Push to GitLab
+git push origin feature/my-feature
+
+# 4. Create Merge Request in GitLab UI
+# 5. Wait for pipeline to pass (enforced)
+# 6. Review changes yourself
+# 7. Resolve any discussions
+# 8. Merge via GitLab UI (no approvals needed)
+# 9. Source branch auto-deleted
+```
+
+### What Happens on Merge
+1. Pipeline runs on feature branch
+2. All checks must pass (enforced)
+3. All discussion threads must be resolved (enforced)
+4. Merge to main (no approvals required)
+5. Main branch pipeline triggers
+6. Deployment to dev environment (if configured in .gitlab-ci.yml)
+7. Source branch automatically deleted
+
+## Benefits of Current Configuration
+
+**Safety:**
+- ✅ Pipelines must succeed - No broken code in main
+- ✅ All threads must be resolved - Ensures code review feedback is addressed
+- ✅ Protected environments - Controlled deployments
+- ✅ No direct pushes to main - Enforces MR workflow
+
+**Speed (for dev/learning):**
+- ✅ No approval requirements - Fast merging
+- ✅ Simple workflow - Easy to learn
+- ✅ Auto branch cleanup - Keeps repo tidy
+
+**Good Habits:**
+- ✅ Merge request workflow - Professional development practice
+- ✅ CI/CD integration - Automated testing
+- ✅ Code review discussions - Team communication
+
+## Future Enhancements (Optional)
+
+For production or team environments, consider:
+- Branch protection for 'main'
+- Approval requirements for production deployments
+- Code owner reviews
+- Status checks integration
+- Branch naming conventions
+
+## Reference
+
+Configuration Date: 2025-11-29
+Environment: Development/Learning
+Team Size: 3 developers + maintainers
+GitLab Version: Enterprise Trial (13 days remaining)

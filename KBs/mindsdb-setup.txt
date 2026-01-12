@@ -24,7 +24,7 @@ MindsDB MCP Server Successfully Configured
   | Server Name | mindsdb-local                                   |                                                                     
   | Transport   | SSE                                             |                                                                     
   | Endpoint    | http://localhost:47334/mcp/sse                  |                                                                     
-  | Auth Token  | pat_2DL9K5vow2OgSJTzYQpPN2eVsyQ8m828iNFwQBpXLsg |                                                                     
+  | Auth Token  | YOUR_AUTH_TOKEN_HERE |                                                                     
                                                                                                                                         
   Available MCP Tools                                                                                                                   
                                                                                                                                         
@@ -82,7 +82,7 @@ MindsDB MCP Server Successfully Configured
   CREATE DATABASE my_bigquery                                                                                                           
   WITH ENGINE = "bigquery",                                                                                                             
   PARAMETERS = {                                                                                                                        
-      "project_id": "gen-lang-client-0622009104",                                                                                       
+      "project_id": "YOUR_GCP_PROJECT_ID",                                                                                       
       "dataset": "test_schema",                                                                                                         
       "service_account_keys": "/path/to/service-account.json"                                                                           
   };                                                                                                                                    
@@ -107,7 +107,7 @@ MindsDB MCP Server Successfully Configured
   2. The MCP server will auto-connect when you start Claude Code                                                                        
                                                                                                                                         
   Note: The auth token expires periodically. If connection fails, regenerate it:                                                        
-  curl -X POST -d '{"username":"admin","password":"mindsdb123"}' \                                                                      
+  curl -X POST -d '{"username":"admin","password":"YOUR_MINDSDB_PASSWORD"}' \                                                                      
     -H "Content-Type: application/json" \                                                                                               
     http://localhost:47334/api/login                                                                                                    
                                                                                                                                         
@@ -135,7 +135,7 @@ Step 1: Start MindsDB Docker Container with Authentication
 ----------------------------------------------------------
 docker run -d --name mindsdb \
   -e MINDSDB_USERNAME=admin \
-  -e MINDSDB_PASSWORD=mindsdb123 \
+  -e MINDSDB_PASSWORD=YOUR_MINDSDB_PASSWORD \
   -p 47334:47334 \
   -p 47335:47335 \
   mindsdb/mindsdb
@@ -168,7 +168,7 @@ claude mcp add mindsdb-local http://localhost:47334/mcp/sse \
 Example with actual token:
 claude mcp add mindsdb-local http://localhost:47334/mcp/sse \
   --transport sse --scope user \
-  --header "Authorization: Bearer pat_2DL9K5vow2OgSJTzYQpPN2eVsyQ8m828iNFwQBpXLsg"
+  --header "Authorization: Bearer YOUR_AUTH_TOKEN_HERE"
 
 Step 5: Verify MCP Connection
 -----------------------------

@@ -1,0 +1,69 @@
+claude mcp add --transport http trivago https://mcp.trivago.com/mcp
+
+
+trivago: https://mcp.trivago.com/mcp (HTTP) - Connected
+
+  Next Step: Restart Claude Code if needed. Server is already connected.
+
+  Trivago MCP allows you to:
+  - Search hotels and accommodations
+  - Compare prices across providers
+  - Get hotel details and reviews
+  - Find deals and offers
+  - Access location-based searches
+
+## Common Commands
+
+### Search Hotels
+mcp__trivago__search_hotels
+  - destination: "New York"
+  - check_in: "2025-01-15"
+  - check_out: "2025-01-18"
+  - guests: 2
+
+### Get Hotel Details
+mcp__trivago__get_hotel
+  - hotel_id: "12345"
+
+### Search by Location
+mcp__trivago__search_by_location
+  - latitude: 40.7128
+  - longitude: -74.0060
+  - radius: 5
+
+### Compare Prices
+mcp__trivago__compare_prices
+  - hotel_id: "12345"
+  - check_in: "2025-01-15"
+  - check_out: "2025-01-18"
+
+### Get Reviews
+mcp__trivago__get_reviews
+  - hotel_id: "12345"
+  - limit: 20
+
+### Search Deals
+mcp__trivago__search_deals
+  - destination: "Paris"
+  - max_price: 200
+  - rating_min: 4
+
+## Use Cases
+
+### Travel Planning
+- Find accommodations for trips
+- Compare prices across booking sites
+- Read hotel reviews
+- Discover deals and discounts
+
+### Business Travel
+- Search corporate-friendly hotels
+- Filter by amenities (wifi, parking)
+- Find proximity to meeting locations
+- Book last-minute accommodations
+
+### Budget Travel
+- Find best price guarantees
+- Search by price range
+- Discover off-season deals
+- Compare value across properties
