@@ -1,0 +1,36 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Config files with sensitive data
+teams-config.json
+claude-setup-config.json
+claude-setup-ikanban.json
+
+# Keep example configs
+!*.example.json
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
