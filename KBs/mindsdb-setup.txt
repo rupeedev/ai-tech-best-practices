@@ -150,7 +150,7 @@ Expected output:
 
 Step 3: Get Authentication Token
 --------------------------------
-curl -s -X POST -d '{"username":"admin","password":"mindsdb123"}' \
+curl -s -X POST -d '{"username":"admin","password":"YOUR_MINDSDB_PASSWORD"}' \
   -H "Content-Type: application/json" \
   http://localhost:47334/api/login
 
