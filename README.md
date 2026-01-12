@@ -43,17 +43,24 @@ Documentation and presentations on Temporal workflow orchestration for reliable 
 
 ### MCP Tools & Utilities (`mcp/`)
 
+**General Purpose Tools:**
+
 | Tool | Description |
 |------|-------------|
 | `vulnerability_scanner.py` | Scan codebase for exposed secrets, API keys, and credentials |
 | `claude_setup.py` | Automated Claude Code project setup (CLAUDE.md, commands, hooks) |
 | `db_server.py` | Database MCP server for Supabase/Postgres operations |
-| `ikanban.py` | iKanban CLI & MCP server for task management |
-| `server.py` | Vibe Kanban MCP server for AI coding agents |
-| `cli.py` | vibe-kanban CLI client for direct API access |
 | `deploy.py` | Railway deployment script for frontend/backend |
 | `setup_statusline.py` | Configure Claude Code status line (model, tokens, cost) |
 | `MCP-Setup-TUTORIAL.md` | Step-by-step MCP server setup guide |
+
+**iKanban Project Tools:**
+
+| Tool | Description |
+|------|-------------|
+| `ikanban.py` | iKanban CLI & MCP server for task management |
+| `server.py` | Vibe Kanban MCP server for AI coding agents |
+| `cli.py` | vibe-kanban CLI client for direct API access |
 
 ## How You Can Benefit
 
@@ -192,11 +199,11 @@ This repository curates and builds upon excellent work from the community. Full 
 │   ├── vulnerability_scanner.py # Secret detection tool
 │   ├── claude_setup.py          # Project setup automation
 │   ├── db_server.py             # Database MCP server
-│   ├── ikanban.py               # Task management CLI/MCP
-│   ├── server.py                # Vibe Kanban MCP server
-│   ├── cli.py                   # CLI client
 │   ├── deploy.py                # Deployment script
-│   └── setup_statusline.py      # Status line config
+│   ├── setup_statusline.py      # Status line config
+│   ├── ikanban.py               # iKanban: Task management CLI/MCP
+│   ├── server.py                # iKanban: Vibe Kanban MCP server
+│   └── cli.py                   # iKanban: CLI client
 ├── templates/                   # Project templates
 └── tracking/                    # Task and changelog tracking
 ```
