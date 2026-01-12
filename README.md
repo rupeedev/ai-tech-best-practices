@@ -41,6 +41,9 @@ Documentation and presentations on Temporal workflow orchestration for reliable 
 - React Server Components
 - Routing strategies
 
+### Security Tools (`mcp/`)
+- **Vulnerability Scanner** - Scan your codebase for exposed secrets before going public
+
 ## How You Can Benefit
 
 **For AI/LLM Developers:**
@@ -63,6 +66,73 @@ Documentation and presentations on Temporal workflow orchestration for reliable 
 1. Browse the `KBs/` folder for AI and tool integrations
 2. Check `docs/` for development best practices
 3. Use `templates/` for project scaffolding
+
+## Vulnerability Scanner
+
+Before sharing your code publicly, scan for exposed secrets using the included vulnerability scanner.
+
+### Features
+
+Detects **30+ secret patterns** including:
+- API keys (AWS, OpenAI, Anthropic, GitHub, Slack, Stripe, Google, etc.)
+- Database connection strings with credentials
+- Private keys (RSA, SSH, PGP, EC)
+- Bearer tokens & JWTs
+- Passwords in config files
+- Cloud credentials (Azure, GCP)
+
+### Usage
+
+```bash
+# Scan current directory
+python3 mcp/vulnerability_scanner.py .
+
+# Scan specific path
+python3 mcp/vulnerability_scanner.py /path/to/project
+
+# Verbose output (show files being scanned)
+python3 mcp/vulnerability_scanner.py . -v
+
+# Export findings to JSON
+python3 mcp/vulnerability_scanner.py . -o report.json
+```
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | No issues found |
+| `1` | HIGH severity findings |
+| `2` | CRITICAL severity findings |
+
+### Example Output
+
+```
+================================================================================
+VULNERABILITY SCAN REPORT
+================================================================================
+
+Root Path: /your/project
+Files Scanned: 150
+
+SUMMARY
+  CRITICAL: 0
+  HIGH: 0
+  MEDIUM: 0
+  LOW: 0
+
+No secrets or vulnerabilities detected!
+================================================================================
+```
+
+### CI/CD Integration
+
+Add to your GitHub Actions workflow:
+
+```yaml
+- name: Security Scan
+  run: python3 mcp/vulnerability_scanner.py . && echo "No secrets found!"
+```
 
 ## Credits & Attributions
 
@@ -107,6 +177,8 @@ This repository curates and builds upon excellent work from the community. Full 
 │   ├── temporal/           # Temporal workflow docs
 │   └── Tools-Setup/        # Tool configuration guides
 ├── docs/                   # Development documentation
+├── mcp/                    # MCP tools & utilities
+│   └── vulnerability_scanner.py  # Secret detection tool
 ├── templates/              # Project templates
 └── tracking/               # Task and changelog tracking
 ```
