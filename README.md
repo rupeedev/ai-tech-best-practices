@@ -209,6 +209,3 @@ Found an error or want to add more resources? Contributions are welcome!
 
 This is a collection of curated resources. Please respect the original authors' licenses and attributions when using this material.
 
----
-
-*Built with the help of [Claude Code](https://claude.ai/claude-code)*
